@@ -19,9 +19,9 @@ int main()
 		spaceShip.update(1.0f);
 	} while(spaceShip.getTimeElapsed() < 5); //5 SECONDS UNTIL THE RIGHT ENGINE FAILS
 
-	
-	spaceShip.applyForce(Vec3((5e7 / 2), 0.0, 0.0)); //THE FORCE OF THE LEFT ENGINE 
 	spaceShip.applyTorque(resultantTorque); //TORUQE CREATING THE ANGULAR STUFF 
+
+	spaceShip.applyForce(Vec3((5e7 / 2), 0.0, 0.0)); //THE FORCE OF THE LEFT ENGINE 
 
 
 	for (int i = 0; i < 500; i++)

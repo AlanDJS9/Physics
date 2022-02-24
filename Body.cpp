@@ -46,30 +46,30 @@ Body::Body(double mass_, double rotationalInertia_)
 void Body::update(double deltaTime)
 {
 	//WE CALCULATE THE ANGULAR VELOCITY HERE
-	angularVel = angularVel +  (angularAcc * deltaTime);
 
 	if (angularAcc != 0) //THIS IF HELPS IN CASE THE ANGULAR ACC = 0
 	{
 		//CALCULATING THE ANGULAR DISPLACEMENT
-		angularDis = angularDis + (angularVel * deltaTime) + (0.5 * angularAcc * pow(deltaTime, 2));
+		angularDis = angularDis + (angularVel * deltaTime) + (0.5f * angularAcc * pow(deltaTime, 2));
 			//((angularVel * angularVel) - (initialAngularVel * initialAngularVel)) / (2.0 * angularAcc);
 	}
+	angularVel = angularVel + (angularAcc * deltaTime);
+
 	printf("| t = %f s | angularAcc = %f s | angularVel = %f s | angularDis = %f s | force.x = %f s | force.y = %f s | acc.x = %f s | acc.y = %f s | vel.x = %f s | vel.y = %f s | pos.x = %f m |  pos.y = %f m/s | \n", ttime, angularAcc, angularVel, angularDis, force.x, force.y, acc.x, acc.y, vel.x, vel.y, pos.x, pos.y);
 
-	//initialAngularVel = angularVel;
-	//initialAngularVel = angularVel;
-	//cout << time << " " << angularAcc << " "<< angularVel << " " << angularDis << endl;
+
 
 	//UPDATING LINEAR STUFF, POSITION, VELOCITY, ACCELERATION 
+	force = Vec3(((force.x) * cos(angularDis) - (force.y * sin(angularDis))), ((force.x) * sin(angularDis) + ((force.y) * cos(angularDis))), 0.0);
+	acc = Vec3(force.x / mass, force.y / mass, 0.0);
+
 	pos.x += vel.x * deltaTime + 0.5f * acc.x * deltaTime * deltaTime;
 	pos.y += vel.y * deltaTime + 0.5f * acc.y * deltaTime * deltaTime;
 	pos.z += vel.z * deltaTime + 0.5f * acc.z * deltaTime * deltaTime;
 	vel.y += acc.y * deltaTime;
 	vel.x += acc.x * deltaTime;
 
-	acc = Vec3(force.x / mass, force.y / mass, 0.0);
-	force = Vec3(((force.x) * cos(angularDis) - (force.y * sin(angularDis))), ((force.x) * sin(angularDis) + ((force.y) * cos(angularDis))), 0.0);
-
+	//SECONDS ELAPSED
 	ttime += 1;
 }
 
@@ -83,7 +83,6 @@ void Body::applyForce(Vec3 incomingFForce)
 void Body::applyTorque(Vec3 torqueAppplied)
 {
 	angularAcc = torqueAppplied.x / rotationalInertia;
-
 	force = Vec3(((force.x) * cos(angularDis) - (force.y * sin(angularDis))), ((force.x) * sin(angularDis) + ((force.y) * cos(angularDis))), 0.0);
 
 }
